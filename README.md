@@ -6,17 +6,21 @@ FlowPlan은 고정된 시간표에 나를 맞추는 스트레스에서 벗어나
 
 ---
 
-## ✨ 핵심 컨셉 (Core Concept)
+## 🎯 기획 의도 (Project Background)
 
-기존 스케줄러가 "지키지 못한 계획"에 대한 부채감을 주었다면, **FlowPlan**은 그 차이를 데이터로 전환합니다.
-- **실행(Do):** 실제 시작/종료 버튼을 기반으로 타임라인 업데이트
-- **조정(Adjust):** 지연 시 뒤쪽 유동 일정을 자동으로 밀기 (Shift)
-- **우선순위(Priority):** 고정 일정(Fixed)을 침범하지 않는 선에서 유동 일정 최적화
-- **분석(Analyze):** 스킵 사유와 공백(Gap) 데이터를 통한 생활 패턴 개선
+### 1. 문제 제기 (Problem)
+* **경직된 계획:** 기존 플래너는 10분만 늦어져도 전체 계획이 틀어지며 사용자에게 패배감을 줍니다.
+* **현실과의 괴리:** 갑작스러운 업무나 컨디션 변화 등 삶의 변수를 반영하기 어렵습니다.
+* **데이터의 부재:** 내가 왜 계획을 못 지켰는지, 버려지는 공백 시간이 얼마인지 알기 어렵습니다.
+
+### 2. 해결 방안 (Solution)
+* **유동적 대응:** 사용자의 [시작] 시점에 맞춰 이후 일정을 자동으로 밀거나 당깁니다.
+* **우선순위 보호:** 중요한 고정 일정(Fixed)은 시스템이 절대적으로 보호합니다.
+* **데이터 기록:** 스킵 사유와 공백(Gap)을 기록하여 실질적인 생활 개선 가이드를 제공합니다.
 
 ---
 
-## 🚀 주요 기능 (Main Features)
+## ✨ 핵심 기능 (Main Features)
 
 ### 1. 일정 유형 이원화
 - **Fixed (고정):** 수업, 회의, 약속 등 변경 불가능한 시간. (유동 일정이 밀려와도 우선순위를 가짐)
@@ -32,18 +36,20 @@ FlowPlan은 고정된 시간표에 나를 맞추는 스트레스에서 벗어나
 - **Auto-Trim:** 유동 일정이 밀리다가 고정 일정과 겹치면, 고정 일정 시작 시간에 맞춰 앞 일정을 자동 종료.
 - **Gap Tracking:** 스킵이나 조기 종료로 발생한 '공백 시간'을 추적하고 시각화.
 
-### 4. 히스토리 & 리포트
-- **Timeline Comparison:** 계획했던 시간(Gray)과 실제 수행 시간(Color)을 겹쳐서 비교.
-- **Pattern Feedback:** "주로 어떤 사유로 스킵하는지", "어떤 시간대에 지연이 많은지" 분석 데이터 제공.
-
 ---
 
-## 🛠 기술 스택 (Tech Stack)
+## ⚙️ 시스템 핵심 로직 (System Logic)
 
-- **Frontend:** Flutter / React Native (Cross-platform)
-- **Database:** SQLite / Room (Local persistence)
-- **Logic:** Dynamic Time-shifting Algorithm
-- **Notifications:** OS Native Alarm & Foreground Service
+### 🛠 일정 지연 시 (Delay Logic)
+1. 사용자가 `n분 뒤 시작` 선택 혹은 지연 시작.
+2. `Current_Task.actual_start` 업데이트.
+3. `Next_Task(Flexible).planned_start`를 `n`분만큼 순차적으로 연기.
+4. 만약 `Next_Task`가 `Fixed_Task`와 겹칠 경우, 유동 일정의 `duration`을 축소하거나 강제 종료 알림 발송.
+
+### 🛠 일정 조기 종료 시 (Early Bird Logic)
+1. 사용자가 `일정 종료` 및 `다음 일정 즉시 시작` 선택.
+2. 이후의 모든 `Flexible Tasks`를 앞으로 당겨 재배치.
+3. 하루의 끝에 생성된 여유 시간을 'Free Time'으로 표시.
 
 ---
 
@@ -58,14 +64,15 @@ FlowPlan은 고정된 시간표에 나를 맞추는 스트레스에서 벗어나
 
 ---
 
-## ⚙️ 설치 및 빌드 방법 (Getting Started)
+## 🛠 기술 스택 (Tech Stack)
 
-```bash
-# Repository Clone
-git clone [https://github.com/your-username/FlowPlan.git](https://github.com/your-username/FlowPlan.git)
+- **Frontend:** Flutter / React Native
+- **Database:** SQLite / Room (Local persistence)
+- **State Management:** Provider / Riverpod / Redux
+- **Notification:** OS Native Alarm & Foreground Service
 
-# Install Dependencies
-flutter pub get
+---
 
-# Run Project
-flutter run
+## 📄 라이선스 (License)
+
+This project is licensed under the MIT License.
